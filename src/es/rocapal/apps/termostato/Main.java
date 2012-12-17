@@ -112,6 +112,9 @@ public class Main extends Activity {
                 
         startService(new Intent(this, ADKService.class));		
         
+        // Init programmed Temp
+        updateProgrammedTemp((float)(0.0));
+        
     }
     
     @Override
