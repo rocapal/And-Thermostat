@@ -48,12 +48,14 @@ public class ThermAccessory {
 	
 	public static final String ACTION_USB_PERMISSION = "es.rocapal.apps.termostato.USB_PERMISSION";
 	
-	private static final int ACTION_GET_TEMPERATURE = 0;
-	private static final int ACTION_GET_HEAT_STATUS = 1;
-	private static final int ACTION_SET_HEAT_STATUS = 2;
+	private static final int ACTION_GET_TEMPERATURE 	= 0;
+	private static final int ACTION_GET_HEAT_STATUS 	= 1;
+	private static final int ACTION_SET_ON_HEAT_STATUS 	= 2;
+	private static final int ACTION_SET_OFF_HEAT_STATUS = 3;
 	
 	private final String TAG = getClass().getSimpleName();
-	private final Integer UPDATED_TIME = 1000;
+	
+	private final Integer UPDATED_TIME = 10000;
 	
 	static ThermAccessory mInstance = null; 
 	
@@ -69,7 +71,7 @@ public class ThermAccessory {
 	private Timer mTempTimer = null;
 	private static ArrayList<IADKService> mIArray = new ArrayList<IADKService>();
 
-	private Controller mController;
+	private Controller mController = null;;
 	
 	public static ThermAccessory getInstance ()
 	{
@@ -155,15 +157,18 @@ public class ThermAccessory {
 						
 			notifyAccesoryStatus(true);
 			
-			Log.d(TAG,"Creating Timer");
+			Log.d(TAG,"Init heat status OFF");
+			setHeatStatus(false);
+			 
+			mTempTimer = new Timer();	
 			
-			mTempTimer = new Timer();
 			mTempTimer.scheduleAtFixedRate(new TimerTask() {
 				@Override
 				public void run() {
 					sendAction(ACTION_GET_TEMPERATURE);
 				}
 			}, 0, UPDATED_TIME);
+			
 						
 			
 		} else {
@@ -186,6 +191,7 @@ public class ThermAccessory {
 		
 		if (mTempTimer != null)
 			mTempTimer.cancel();
+		
 		notifyAccesoryStatus(false);
 		
 		// Descriptor
@@ -247,9 +253,36 @@ public class ThermAccessory {
 	}
 	
 	public void setProgrammedTemp (float temp)
-	{
+	{		
+			
 		mController.setProgrammedTemp(temp);
-		notifyHeatStatus (mController.calcHeatStatus());
+		
+		Boolean status = mController.calcHeatStatus();
+		notifyHeatStatus (status);
+		
+		setHeatStatus (status);
+	}
+	
+	private void setHeatStatus (Boolean status)
+	{
+		// TODO: Know the last time that heat was set. This method
+		// execute when the user push the buttons. And if the user push
+		// the buttons very quickly this method executes each time.
+		
+		if (mAccessory == null )
+			return;
+		
+		final int action = status ? ACTION_SET_ON_HEAT_STATUS : ACTION_SET_OFF_HEAT_STATUS;
+		
+		
+		Timer t = new Timer(); 
+        t.schedule(new TimerTask() { 
+                public void run() { 
+                	sendAction (action);
+                } 
+        }, 500); 
+        
+        		
 	}
 	
 
@@ -268,10 +301,11 @@ public class ThermAccessory {
 		 *      -> Recv:    0x2 0x1 B0   (B0 = 0x1 -> Head ON ; B0 = 0x2 -> Head OFF)
 		 *     
 		 *  Set heat state: 3 bytes
-		 *      -> Send:	0x2 0x2 0x0
-		 *      -> Recv:    0x2 0x2 B0   (B0 = 0x1 -> Head ON ; B0 = 0x2 -> Head OFF)
+		 *      -> Send:	0x2 0x2 B0   (B0 = 0x1 -> Head ON ; B0 = 0x2 -> Head OFF)
+		 *      -> Recv:    0x2 0x2 B0   (B0 = 0x1 -> OK ; B0 = 0x0 -> Error )
 		 */				
 		
+		Log.d(TAG, "SEND ACTION = " + String.valueOf(action));
 		
 		switch (action) {
 		case ACTION_GET_TEMPERATURE:
@@ -282,9 +316,16 @@ public class ThermAccessory {
 			sendCommand((byte)2, (byte)1, 0);
 			break;
 			
-		case ACTION_SET_HEAT_STATUS:
-			sendCommand((byte)2, (byte)2, 0);
-			break;
+		case ACTION_SET_ON_HEAT_STATUS:
+			sendCommand((byte)2, (byte)2, 1);
+			// No response!
+			return; 
+		
+		case ACTION_SET_OFF_HEAT_STATUS:
+			sendCommand((byte)2, (byte)2, 2);
+			// No response!
+			return;
+			
 		default:
 			break;
 		}
@@ -310,22 +351,14 @@ public class ThermAccessory {
 
 				// Update the controller
 				mController.setRoomTemp(roomTemp);
-				notifyHeatStatus (mController.calcHeatStatus());
+				Boolean status = mController.calcHeatStatus();
+				notifyHeatStatus (status);
+				setHeatStatus(status);
 				
 				// Send data to listeners
 				for (IADKService  listener : mIArray) {
 					listener.notifyTemperature(roomTemp);
-				}
-				
-				/*
-				Main.mContext.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						Main.mContext.tvEnvTemp.setText( String.format("%.2f", temp ));								
-					}
-				});		
-				*/
+				}								
 
 				i += 5;
 				break;
@@ -335,7 +368,9 @@ public class ThermAccessory {
 				i = len;
 				break;
 			}
-		}		
+		}	
+		
+		Log.d(TAG, "END ACTION = " + String.valueOf(action));
 	}
 	
 	private void sendCommand(byte command, byte target, int value) 
