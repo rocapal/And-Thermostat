@@ -1,0 +1,212 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlMain"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".Main" >
+    
+   
+    
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/llTemp1"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="40dip"        
+        android:layout_below="@id/rlMain" 
+        >
+	    
+        <TextView
+	        xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:layout_width="120dip"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"	    
+	        android:gravity="center"    
+	        android:text = "Temperatura Ambiente"	        
+	        android:textSize="20dip"/>
+        
+        <LinearLayout
+	        xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:layout_gravity="center"
+	        android:id="@+id/llTemp1a">
+        
+	        <TextView
+		        xmlns:android="http://schemas.android.com/apk/res/android"
+		        android:id="@+id/tvEnvTemp"
+		        android:layout_width="150dip" 
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"	 
+		        android:gravity="right"     
+		        android:layout_marginTop="13dip"	
+		        android:layout_marginBottom="5dip"        	  	        
+		        android:text = "20.00"	        
+		        android:textSize="58dip"/>
+	        
+	        <TextView
+		        xmlns:android="http://schemas.android.com/apk/res/android"
+		        android:layout_width="wrap_content" 
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"	 
+		        android:gravity="center"		             
+		        android:layout_marginTop="13dip"
+		        android:layout_marginBottom="5dip"
+		        android:layout_marginLeft="5dip"
+		        android:text = "º"	        
+		        android:textSize="48dip"/>
+        
+        </LinearLayout>
+    </LinearLayout>
+    
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/llTemp2"
+        android:orientation="vertical"        
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="40dip"
+        android:layout_toRightOf="@+id/llTemp1"
+        android:layout_below="@id/rlMain" 
+         >
+	    
+        <TextView
+	        xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:layout_width="120dip" 
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:gravity="center"  
+	        android:text = "Temperatura Programada"
+	        android:textSize="20dip"/>
+        
+        <LinearLayout
+	        xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:layout_gravity="center"
+	        android:id="@+id/llTemp2a">
+        
+	        <TextView
+		        xmlns:android="http://schemas.android.com/apk/res/android"
+		        android:id="@+id/tvTemp"
+		        android:layout_width="125dip" 
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"	 
+		        android:gravity="center"     
+		        android:layout_marginTop="13dip"	
+		        android:layout_marginBottom="5dip"        	  	        
+		        android:text = "22.0"	        
+		        android:textSize="58dip"/>
+	        
+	        <TextView
+		        xmlns:android="http://schemas.android.com/apk/res/android"
+		        android:layout_width="wrap_content" 
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"	 
+		        android:gravity="center"     
+		        android:layout_marginTop="13dip"
+		        android:layout_marginBottom="5dip"
+		        android:layout_marginLeft="5dip"
+		        android:text = "º"	        
+		        android:textSize="48dip"/>
+        
+        </LinearLayout>                    
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/llTemp2"
+        android:layout_below="@id/rlMain"
+        android:layout_marginTop="40dip"
+        android:layout_marginLeft="20dip"
+        android:orientation="vertical" >
+
+        <Button
+            android:layout_width="80dip"
+            android:layout_height="65dip"
+            android:id="@+id/btUp"
+            android:text="+"
+            android:textSize="30dip" >
+        </Button>
+
+        <Button
+            android:layout_width="80dip"
+            android:layout_height="65dip"
+            android:id="@+id/btDown"
+            android:text="-"
+            android:textSize="30dip" >
+        </Button>
+    </LinearLayout>
+    
+   
+    
+    <RelativeLayout 
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llTemp2"
+        android:layout_alignParentBottom="true">
+        
+        <LinearLayout
+	        xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"	        
+	        android:orientation="horizontal"
+	        android:layout_alignParentBottom="true" >
+	        
+            <LinearLayout
+		        xmlns:android="http://schemas.android.com/apk/res/android"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"	        
+		        android:orientation="vertical"
+		        
+		        >		                       
+		    
+			    <TextView	        
+			        android:id="@+id/tvHeatStatus"
+			        android:layout_width="wrap_content" 
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="10dip"
+			        android:layout_marginBottom="5dip"   
+			        android:text = "HEAT: OFF"
+			        android:textSize="18sp"
+			        />
+			     
+			     <TextView	        
+		        
+			        android:id="@+id/tvUsbStatus"	        
+			        android:layout_width="wrap_content" 
+			        android:layout_height="wrap_content"				        
+			        android:textSize="18sp"			        
+			        android:layout_marginLeft="10dip"  
+			        android:layout_marginBottom="5dip"
+			     />
+			     
+            </LinearLayout>
+	                    	     	
+        </LinearLayout>
+        
+        <TextView             
+	            android:id="@+id/tvDate"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"            
+	            android:textSize="18sp"
+	            android:layout_marginRight="10dip"
+	            android:layout_marginBottom="10dip"	            
+	            android:layout_alignParentRight="true" 	
+	            android:layout_alignParentBottom="true"
+	                                  
+	    /> 
+        
+    </RelativeLayout>
+    
+</RelativeLayout>
