@@ -193,7 +193,8 @@ public class Main extends Activity {
 		public void run() {
 			
 			String date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-			String[] mydate = date.split(",");			
+			String[] mydate = date.split(" ");
+			Log.d("TAG", date);
 			tvDate.setText(mydate[1]);
 		} 
 	};
